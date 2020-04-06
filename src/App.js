@@ -4,7 +4,7 @@ import Data from './components/Data'
 function App() {
 	return (
 		<div className="App">
-			<h1>App</h1>
+			<h2>International Space Station Position</h2>
 			<Data />
 		</div>
 	)
