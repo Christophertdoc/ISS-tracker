@@ -22,13 +22,14 @@ const Data = () => {
         })
     }
 
-    const calcSpeed = () => {
-        // const speed = getSpeed(
-        //     { latitude: response.iss_position.latitude, longitude: response.iss_position.longitude, time: response.timestamp },
-        //     { latitude: lat, longitude: lng, time: time }
-        // )
+    if (response) {
+        const speed = getSpeed(
+            { latitude: response.iss_position.latitude, longitude: response.iss_position.longitude, time: response.timestamp },
+            { latitude: response.iss_position.latitude + 2, longitude: response.iss_position.longitude + 2, time: response.timestamp + 2 }
+        )
         // console.log('speed', speed)
     }
+    
 
     return (
         <div>
