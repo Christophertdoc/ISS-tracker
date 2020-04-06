@@ -7,16 +7,20 @@ const Data = () => {
     const [response, setResponse] = useState('')
 
     useEffect(() => {
+        getData()
         const interval = setInterval(() => {
-            axios.get(`http://api.open-notify.org/iss-now.json`)
-            .then(response => {
-                console.log('response', response.data)
-                setResponse(response.data)
-            })
-        }, 5000);
-        return () => clearInterval(interval);
-      }, []);
+            getData()
+        }, 3000)
+        return () => clearInterval(interval)
+    }, [])
 
+    const getData = () => {
+        axios.get(`http://api.open-notify.org/iss-now.json`)
+        .then(response => {
+            console.log('response', response.data)
+            setResponse(response.data)
+        })
+    }
 
     return (
         <div>
