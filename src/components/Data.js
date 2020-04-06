@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { getSpeed } from 'geolib'
-import Map from './Map'
+import { getSpeed, convertSpeed } from 'geolib'
+// import Map from './Map'
 
 const Data = () => {
 
@@ -11,7 +11,7 @@ const Data = () => {
         getData(true)
         const interval = setInterval(() => {
             getData()
-        }, 3000)
+        }, 5000)
         return () => clearInterval(interval)
     }, [])  // The empty array at the end of useEffect allows this function to only run once after the initial render. 
 
@@ -21,10 +21,7 @@ const Data = () => {
             if (first) {
                 setResponse(response => [resp.data, ...response])
             } else {
-                console.log('not first')
-                setResponse(response => 
-                    [resp.data, response[0]]
-                )
+                setResponse(response => [resp.data, response[0]])
             } 
         })
     }
@@ -36,10 +33,12 @@ const Data = () => {
             { latitude: second.iss_position.latitude, longitude: second.iss_position.longitude, time: second.timestamp },
             { latitude: first.iss_position.latitude, longitude: first.iss_position.longitude, time: first.timestamp }
         )
-        console.log('speed', speed)
+        const mps = speed/1000
+        const kmh = convertSpeed(mps, 'kmh')
+        console.log('kmh', kmh)
     }
-    
-    // console.log('response', response)
+
+    console.log('response', response)
 
     return (
         <div>
