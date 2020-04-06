@@ -6,20 +6,33 @@ import Map from './Map'
 const Data = () => {
 
     const [firstResponse, setFirstResponse] = useState('')
+    const [secondResponse, setSecondResponse] = useState('')
+    const [target, setTarget] = useState('setFirstResponse')
 
     useEffect(() => {
         getData()
         const interval = setInterval(() => {
-            getData()
+            if (target === 'setFirstResponse') {
+                getData(target)
+            } else if (target === 'setSecondResponse') {
+                getData('setSecondResponse') 
+            }
         }, 3000)
         return () => clearInterval(interval)
-    }, [])  // The empty array at the end of useEffect allows this function to only run once after the initial render. 
+    }, [target])  // The empty array at the end of useEffect allows this function to only run once after the initial render. 
 
-    const getData = () => {
+    const getData = (targ) => {
         axios.get(`http://api.open-notify.org/iss-now.json`)
         .then(resp => {
-            // console.log('response', resp.data)
-            setFirstResponse(resp.data)
+            if (targ === 'setFirstResponse') {
+                setFirstResponse(resp.data)
+                setTarget('setSecondResponse')
+                
+            } else {
+                setSecondResponse(resp.data)
+                setTarget('setFirstResponse')
+            }
+            console.log('targ', targ)
         })
     }
 
