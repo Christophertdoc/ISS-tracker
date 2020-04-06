@@ -6,19 +6,19 @@ import { getSpeed, convertSpeed } from 'geolib'
 const Data = () => {
 
     const [response, setResponse] = useState([])
+    const [speed, setSpeed] = useState('')
 
     useEffect(() => {
-        getData(true)
         const interval = setInterval(() => {
             getData()
-        }, 5000)
+        }, 3000)
         return () => clearInterval(interval)
-    }, [])  // The empty array at the end of useEffect allows this function to only run once after the initial render. 
+    }, [response]) 
 
-    const getData = (first) => {
+    const getData = () => {
         axios.get(`http://api.open-notify.org/iss-now.json`)
         .then(resp => {
-            if (first) {
+            if (response.length < 1) {
                 setResponse(response => [resp.data, ...response])
             } else {
                 setResponse(response => [resp.data, response[0]])
@@ -26,19 +26,21 @@ const Data = () => {
         })
     }
 
-    if (response.length === 2) {
-        const first = response[0]
-        const second = response[1]
-        const speed = getSpeed(
-            { latitude: second.iss_position.latitude, longitude: second.iss_position.longitude, time: second.timestamp },
-            { latitude: first.iss_position.latitude, longitude: first.iss_position.longitude, time: first.timestamp }
-        )
-        const mps = speed/1000
-        const kmh = convertSpeed(mps, 'kmh')
-        console.log('kmh', kmh)
-    }
+    // if (response.length === 2) {
+    //     const first = response[0]
+    //     const second = response[1]
+    //     const speed = getSpeed(
+    //         { latitude: second.iss_position.latitude, longitude: second.iss_position.longitude, time: second.timestamp },
+    //         { latitude: first.iss_position.latitude, longitude: first.iss_position.longitude, time: first.timestamp }
+    //     )
+    //     const mps = speed/1000
+    //     const kmh = convertSpeed(mps, 'kmh')
+    //     // console.log('kmh', kmh)
+    //     setSpeed(kmh)
+    // }
 
     console.log('response', response)
+    // console.log('speed', speed)
 
     return (
         <div>
