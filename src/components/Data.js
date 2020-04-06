@@ -26,10 +26,10 @@ const Data = () => {
                     { latitude: first.iss_position.latitude, longitude: first.iss_position.longitude, time: first.timestamp }
                 )
                 const mps = speed/1000
-                const kmh = convertSpeed(mps, 'kmh')
+                const kmh = Math.round(convertSpeed(mps, 'kmh'))
                 setSpeed(kmh.toString())
             }
-        }, 2000)
+        }, 1500)
         return () => clearInterval(interval)
     }, [response]) 
 
@@ -37,15 +37,19 @@ const Data = () => {
 
     return (
         <div>
-            {response.length &&
+            {response.length ? (
                 <div>
                     <h3>Latitude: { response[0].iss_position.latitude }</h3>
                     <h3>Longitude: { response[0].iss_position.longitude }</h3>
+                    {speed !== '' ? (
+                        <h4>Speed: {speed} kmh</h4>
+                    ) : (
+                        <h4>Loading Speed...</h4>
+                    )}     
                 </div>
-            }
-            {speed !== '' &&
-                <h4>Speed: {speed} kmh</h4>
-            }
+            ) : (
+                <h3>Loading...</h3>
+            )}      
         </div>
     )
 }
