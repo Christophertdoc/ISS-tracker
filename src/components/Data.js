@@ -5,38 +5,48 @@ import Map from './Map'
 
 const Data = () => {
 
-    const [response, setResponse] = useState('')
+    const [response, setResponse] = useState([])
 
     useEffect(() => {
-        getData()
+        getData(true)
         const interval = setInterval(() => {
             getData()
         }, 3000)
         return () => clearInterval(interval)
     }, [])  // The empty array at the end of useEffect allows this function to only run once after the initial render. 
 
-    const getData = () => {
+    const getData = (first) => {
         axios.get(`http://api.open-notify.org/iss-now.json`)
         .then(resp => {
-            setResponse(resp.data)
+            if (first) {
+                setResponse(response => [resp.data, ...response])
+            } else {
+                console.log('not first')
+                setResponse(response => 
+                    [resp.data, response[0]]
+                )
+            } 
         })
     }
 
-    if (response) {
+    if (response.length === 2) {
+        const first = response[0]
+        const second = response[1]
         const speed = getSpeed(
-            { latitude: response.iss_position.latitude, longitude: response.iss_position.longitude, time: response.timestamp },
-            { latitude: response.iss_position.latitude + 2, longitude: response.iss_position.longitude + 2, time: response.timestamp + 2 }
+            { latitude: second.iss_position.latitude, longitude: second.iss_position.longitude, time: second.timestamp },
+            { latitude: first.iss_position.latitude, longitude: first.iss_position.longitude, time: first.timestamp }
         )
-        // console.log('speed', speed)
+        console.log('speed', speed)
     }
     
+    // console.log('response', response)
 
     return (
         <div>
-            {response &&
+            {response.length &&
                 <div>
-                    <h3>Latitude: { response.iss_position.latitude }</h3>
-                    <h3>Longitude: { response.iss_position.longitude }</h3>
+                    <h3>Latitude: { response[0].iss_position.latitude }</h3>
+                    <h3>Longitude: { response[0].iss_position.longitude }</h3>
                 </div>
             }
         </div>
