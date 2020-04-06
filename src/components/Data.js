@@ -5,34 +5,20 @@ import Map from './Map'
 
 const Data = () => {
 
-    const [firstResponse, setFirstResponse] = useState('')
-    const [secondResponse, setSecondResponse] = useState('')
-    const [target, setTarget] = useState('setFirstResponse')
+    const [response, setResponse] = useState('')
 
     useEffect(() => {
         getData()
         const interval = setInterval(() => {
-            if (target === 'setFirstResponse') {
-                getData(target)
-            } else if (target === 'setSecondResponse') {
-                getData('setSecondResponse') 
-            }
+            getData()
         }, 3000)
         return () => clearInterval(interval)
-    }, [target])  // The empty array at the end of useEffect allows this function to only run once after the initial render. 
+    }, [])  // The empty array at the end of useEffect allows this function to only run once after the initial render. 
 
-    const getData = (targ) => {
+    const getData = () => {
         axios.get(`http://api.open-notify.org/iss-now.json`)
         .then(resp => {
-            if (targ === 'setFirstResponse') {
-                setFirstResponse(resp.data)
-                setTarget('setSecondResponse')
-                
-            } else {
-                setSecondResponse(resp.data)
-                setTarget('setFirstResponse')
-            }
-            console.log('targ', targ)
+            setResponse(resp.data)
         })
     }
 
@@ -44,14 +30,12 @@ const Data = () => {
         // console.log('speed', speed)
     }
 
-    console.log('tweet', firstResponse)
-
     return (
         <div>
-            {firstResponse &&
+            {response &&
                 <div>
-                    <h3>Latitude: { firstResponse.iss_position.latitude }</h3>
-                    <h3>Longitude: { firstResponse.iss_position.longitude }</h3>
+                    <h3>Latitude: { response.iss_position.latitude }</h3>
+                    <h3>Longitude: { response.iss_position.longitude }</h3>
                 </div>
             }
         </div>
