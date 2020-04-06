@@ -10,36 +10,28 @@ const Data = () => {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            getData()
+            axios.get(`http://api.open-notify.org/iss-now.json`)
+            .then(resp => {
+                if (response.length < 1) {
+                    setResponse(response => [resp.data, ...response])
+                } else {
+                    setResponse(response => [resp.data, response[0]])
+                } 
+            })
             if (response.length === 2) {
-                findSpeed()
+                const first = response[0]
+                const second = response[1]
+                const speed = getSpeed(
+                    { latitude: second.iss_position.latitude, longitude: second.iss_position.longitude, time: second.timestamp },
+                    { latitude: first.iss_position.latitude, longitude: first.iss_position.longitude, time: first.timestamp }
+                )
+                const mps = speed/1000
+                const kmh = convertSpeed(mps, 'kmh')
+                setSpeed(kmh.toString())
             }
         }, 2000)
         return () => clearInterval(interval)
     }, [response]) 
-
-    const getData = () => {
-        axios.get(`http://api.open-notify.org/iss-now.json`)
-        .then(resp => {
-            if (response.length < 1) {
-                setResponse(response => [resp.data, ...response])
-            } else {
-                setResponse(response => [resp.data, response[0]])
-            } 
-        })
-    }
-
-    const findSpeed = () => {
-        const first = response[0]
-        const second = response[1]
-        const speed = getSpeed(
-            { latitude: second.iss_position.latitude, longitude: second.iss_position.longitude, time: second.timestamp },
-            { latitude: first.iss_position.latitude, longitude: first.iss_position.longitude, time: first.timestamp }
-        )
-        const mps = speed/1000
-        const kmh = convertSpeed(mps, 'kmh')
-        setSpeed(kmh.toString())
-    }
 
     // console.log('response', response)
 
