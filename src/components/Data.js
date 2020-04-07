@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import calcSpeed from '../services/calcSpeed'
-// import Map from './Map'
+import LocMap from './LocMap'
 
 
 const Data = () => {
@@ -36,7 +36,8 @@ const Data = () => {
                         <h4>Speed: {speed} kmh</h4>
                     ) : (
                         <h4>Loading Speed...</h4>
-                    )}     
+                    )} 
+                    <LocMap lat={response[0].iss_position.latitude} lng={response[0].iss_position.longitude} />
                 </div>
             ) : (
                 <h3>Loading...</h3>
