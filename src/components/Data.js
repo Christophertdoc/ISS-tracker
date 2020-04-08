@@ -8,7 +8,7 @@ const Data = () => {
 
     const [response, setResponse] = useState([])
     const [speed, setSpeed] = useState('')
-
+    
     useEffect(() => {
         const interval = setInterval(() => {
             axios.get(`http://api.open-notify.org/iss-now.json`)
