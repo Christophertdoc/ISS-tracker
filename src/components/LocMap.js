@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import Map from 'ol/Map'
 import View from 'ol/View'
 import TileLayer from 'ol/layer/Tile'
@@ -10,6 +11,10 @@ class LocMap extends React.Component {
 
     constructor(props) {
 		super(props)
+        this.mapRef = null;
+        this.setMapRef = element => {
+          	this.mapRef = element;
+        }
         this.state = {
 			map: '',
         }
@@ -26,9 +31,9 @@ class LocMap extends React.Component {
 	}
 
 	set_map = () => {
-		// console.log('this.props.lng', this.props.lng)
+		const mapDOMNode = ReactDOM.findDOMNode(this.mapRef)
 		let map = new Map({
-			target: this.refs.mapContainer,
+			target: mapDOMNode,
 			layers: [
 				new TileLayer({
 					source: new XYZ({
@@ -38,7 +43,7 @@ class LocMap extends React.Component {
 			],
 			view: new View({
 				center: fromLonLat([this.props.lng, this.props.lat]),
-				zoom: 4,
+				zoom: 5,
 			})
 		})
 		this.setState({ map: map })
@@ -46,7 +51,7 @@ class LocMap extends React.Component {
 
 	render () {
 		if (this.state.map !== '') {
-			return <div ref="mapContainer" style={{ height: '500px', width: '500px' }}>Longitude: { this.props.lng.toString() }</div>
+			return <div ref={this.setMapRef} style={{ height: '500px', width: '500px' }}></div>
 		} else {
 			return <div />
 		}
