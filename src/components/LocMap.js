@@ -26,7 +26,11 @@ const LocMap = (props) => {
 		setTimeout(() => window.location.reload(false), 15000)
 	},[props]) 
 
-	return <div id="map"></div>
+	return (
+		<div id="map">		
+			<img id="iss" alt="International Space Station" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/International_Space_Station.svg/512px-International_Space_Station.svg.png" />			
+		</div>
+	)
 }
 
 export default LocMap
