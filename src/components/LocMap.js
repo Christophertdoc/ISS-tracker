@@ -7,9 +7,27 @@ import {fromLonLat} from 'ol/proj'
 
 
 class LocMap extends React.Component {
+
+    constructor(props) {
+		super(props)
+        this.state = {
+			map: '',
+        }
+    }
  
 	componentDidMount() {
-		var map = new Map({
+		this.set_map()
+	}
+
+	componentDidUpdate(prevProps) {
+		if (prevProps.lng !== this.props.lng) {
+			this.set_map()
+		}
+	}
+
+	set_map = () => {
+		// console.log('this.props.lng', this.props.lng)
+		let map = new Map({
 			target: this.refs.mapContainer,
 			layers: [
 				new TileLayer({
@@ -23,13 +41,15 @@ class LocMap extends React.Component {
 				zoom: 4,
 			})
 		})
-		this.setState({ 
-			map: map
-		})
+		this.setState({ map: map })
 	}
 
 	render () {
-		return <div ref="mapContainer" style={{ height: '500px', width: '500px' }}></div>
+		if (this.state.map !== '') {
+			return <div ref="mapContainer" style={{ height: '500px', width: '500px' }}>Longitude: { this.props.lng.toString() }</div>
+		} else {
+			return <div />
+		}
 	}
 }
 
