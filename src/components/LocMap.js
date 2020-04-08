@@ -26,7 +26,7 @@ const LocMap = (props) => {
 		setTimeout(() => window.location.reload(false), 15000)
 	},[props]) 
 
-	return <div id="map" style={{ height: '500px', width: '500px' }}></div>
+	return <div id="map"></div>
 }
 
 export default LocMap
