@@ -1,91 +1,56 @@
-import React from 'react';
+import React from 'react'
+import Map from 'ol/Map'
+import View from 'ol/View'
+import TileLayer from 'ol/layer/Tile'
+import XYZ from 'ol/source/XYZ'
+import {fromLonLat} from 'ol/proj'
 
-//open layers and styles
-// var ol = require('openlayers');
-// require('openlayers/css/ol.css');
-
-import Map from 'ol/Map';
-import View from 'ol/View';
-import TileLayer from 'ol/layer/Tile';
-import XYZ from 'ol/source/XYZ';
 
 class LocMap extends React.Component {
+
+    constructor(props) {
+		super(props)
+        this.state = {
+			map: '',
+        }
+    }
  
-  componentDidMount() {
+	componentDidMount() {
+		this.set_map()
+	}
 
-    // create feature layer and vector source
-    // var featuresLayer = new ol.layer.Vector({
-    //   source: new ol.source.Vector({
-    //     features:[]
-    //   })
-    // });
+	componentDidUpdate(prevProps) {
+		if (prevProps.lng !== this.props.lng) {
+			this.set_map()
+		}
+	}
 
-    // create map object with feature layer
-    var map = new Map({
-      target: this.refs.mapContainer,
-      layers: [
-        //default OSM layer
-        // new ol.layer.Tile({
-        //   source: new ol.source.OSM()
-        // }),
-        // featuresLayer
-        new TileLayer({
-          source: new XYZ({
-            url: 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-          })
-        })
-      ],
-      view: new View({
-        // center: [-11718716.28195593, 4869217.172379018], //Boulder
-        center: [this.props.lat, this.props.lng],
-        zoom: 5,
-      })
-    });
+	set_map = () => {
+		// console.log('this.props.lng', this.props.lng)
+		let map = new Map({
+			target: this.refs.mapContainer,
+			layers: [
+				new TileLayer({
+					source: new XYZ({
+						url: 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+					})
+				})
+			],
+			view: new View({
+				center: fromLonLat([this.props.lng, this.props.lat]),
+				zoom: 4,
+			})
+		})
+		this.setState({ map: map })
+	}
 
-    // map.on('click', this.handleMapClick.bind(this));
-
-    // save map and layer references to local state
-    this.setState({ 
-      map: map
-      // featuresLayer: featuresLayer
-    });
-
-  }
-
-  // pass new features from props into the OpenLayers layer object
-  // componentDidUpdate(prevProps, prevState) {
-  //   this.state.featuresLayer.setSource(
-  //     new ol.source.Vector({
-  //       features: this.props.routes
-  //     })
-  //   );
-  // }
-
-  // handleMapClick(event) {
-
-  //   // create WKT writer
-  //   var wktWriter = new ol.format.WKT();
-
-  //   // derive map coordinate (references map from Wrapper Component state)
-  //   var clickedCoordinate = this.state.map.getCoordinateFromPixel(event.pixel);
-
-  //   // create Point geometry from clicked coordinate
-  //   var clickedPointGeom = new ol.geom.Point( clickedCoordinate );
-
-  //   // write Point geometry to WKT with wktWriter
-  //   var clickedPointWkt = wktWriter.writeGeometry( clickedPointGeom );
-    
-  //   // place Flux Action call to notify Store map coordinate was clicked
-  //   // Actions.setRoutingCoord( clickedPointWkt );
-
-  // }
-
-  render () {
-    return (
-      <div ref="mapContainer" style={{ height: '500px', width: '500px' }}></div>
-    );
-  }
-
+	render () {
+		if (this.state.map !== '') {
+			return <div ref="mapContainer" style={{ height: '500px', width: '500px' }}>Longitude: { this.props.lng.toString() }</div>
+		} else {
+			return <div />
+		}
+	}
 }
 
 export default LocMap
