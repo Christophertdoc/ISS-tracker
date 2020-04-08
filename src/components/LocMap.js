@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import Map from 'ol/Map'
 import View from 'ol/View'
 import TileLayer from 'ol/layer/Tile'
@@ -8,14 +8,7 @@ import {fromLonLat} from 'ol/proj'
 
 const LocMap = (props) => {
 
-	// const [map, setMap] = useState('')
-
     useEffect(() => {
-        set_map()
-	},[props]) 
-	
-	const set_map = () => {
-		// let map = new Map({
 		new Map({
 			target: document.getElementById('map'),
 			layers: [
@@ -30,8 +23,7 @@ const LocMap = (props) => {
 				zoom: 5,
 			})
 		})
-		// setMap(map)
-	}
+	},[props]) 
 	
 	return <div id="map" style={{ height: '500px', width: '500px' }}></div>
 }
