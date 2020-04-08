@@ -46,7 +46,7 @@ class LocMap extends React.Component {
 
 	render () {
 		if (this.state.map !== '') {
-			return <div ref="mapContainer" style={{ height: '500px', width: '500px' }}>Longitude: { this.props.lng.toString() }</div>
+			return <div ref="mapContainer" style={{ height: '500px', width: '500px' }}></div>
 		} else {
 			return <div />
 		}
