@@ -16,7 +16,7 @@ body {
 }
 
 #iss {
-	width: 80px;
+	width: 60px;
 	position: absolute;
 	z-index: 10;
 	left: 50%;

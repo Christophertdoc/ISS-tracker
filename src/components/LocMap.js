@@ -20,10 +20,10 @@ const LocMap = (props) => {
 			],
 			view: new View({
 				center: fromLonLat([props.lng, props.lat]),
-				zoom: 5,
+				zoom: 0,
 			})
 		})
-		setTimeout(() => window.location.reload(false), 15000)
+		setTimeout(() => window.location.reload(false), 25000)
 	},[props]) 
 
 	return (
